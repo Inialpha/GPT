@@ -5,7 +5,6 @@ The name data_pipeline reflects the complete preparation stage before tokenizati
 """
 from __future__ import annotations
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from typing import Any, Optional, Sequence
 
 @dataclass
@@ -58,7 +57,7 @@ class ArticleTextCleaner:
 
 class CorpusBuilder:
     """Assemble cleaned article text while retaining source provenance."""
-    def __init__(self, separator: str = "\\n\\n"):
+    def __init__(self, separator: str = "\n\n"):
         raise NotImplementedError
 
     def add_article(self, article: WikipediaArticle, cleaned_text: str) -> None:
