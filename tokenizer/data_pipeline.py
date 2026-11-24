@@ -171,6 +171,9 @@ class WikipediaArticleDownloader:
         Returns (successful_articles, failures), where failures maps the
         requested title to its error message.
         """
+        if isinstance(titles, str):
+            titles = [titles]
+
         articles: list[WikipediaArticle] = []
         failures: dict[str, str] = {}
         seen_titles: set[str] = set()
