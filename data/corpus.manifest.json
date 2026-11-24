@@ -1,0 +1,49 @@
+{
+  "corpus_file": "corpus.txt",
+  "saved_at": "2026-11-24T12:56:21.136301+00:00",
+  "article_count": 3,
+  "sources": [
+    {
+      "requested_title": "Psychology",
+      "canonical_title": "Psychology",
+      "page_id": 22921,
+      "revision_id": 1386096542,
+      "canonical_url": "https://en.wikipedia.org/wiki/Psychology",
+      "retrieved_at": "2026-11-24T12:56:18.908473+00:00",
+      "license_name": "CC BY-SA 4.0 / GFDL; check page-specific notices",
+      "source_metadata": {
+        "namespace": 0,
+        "redirects": [],
+        "normalized_titles": []
+      }
+    },
+    {
+      "requested_title": "Machine learning",
+      "canonical_title": "Machine learning",
+      "page_id": 233488,
+      "revision_id": 1384336237,
+      "canonical_url": "https://en.wikipedia.org/wiki/Machine_learning",
+      "retrieved_at": "2026-11-24T12:56:20.012760+00:00",
+      "license_name": "CC BY-SA 4.0 / GFDL; check page-specific notices",
+      "source_metadata": {
+        "namespace": 0,
+        "redirects": [],
+        "normalized_titles": []
+      }
+    },
+    {
+      "requested_title": "Artificial intelligence",
+      "canonical_title": "Artificial intelligence",
+      "page_id": 1164,
+      "revision_id": 1387498036,
+      "canonical_url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+      "retrieved_at": "2026-11-24T12:56:20.972106+00:00",
+      "license_name": "CC BY-SA 4.0 / GFDL; check page-specific notices",
+      "source_metadata": {
+        "namespace": 0,
+        "redirects": [],
+        "normalized_titles": []
+      }
+    }
+  ]
+}

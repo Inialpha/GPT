@@ -352,3 +352,23 @@ class CorpusBuilder:
                     builder._seen_keys.add(f"title:{title.strip().casefold()}")
 
         return builder
+
+
+if __name__ == "__main__":
+    downloader = WikipediaArticleDownloader()
+    cleaner = ArticleTextCleaner()
+    builder = CorpusBuilder()
+
+    titles = [
+        "Psychology",
+        "Machine learning",
+        "Artificial intelligence"
+    ]
+
+    articles, failures = downloader.fetch_many(titles)
+
+    for article in articles:
+        cleaned_text = cleaner.clean(article.text)
+        builder.add_article(article, cleaned_text)
+
+    corpus_path, manifest_path = builder.save("data/corpus.txt")
