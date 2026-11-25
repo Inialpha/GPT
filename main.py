@@ -2,7 +2,7 @@ from tokenizer import CorpusBuilder
 from tokenizer.character import CharacterTokenizer
 from transformer.embeddings import TokenAndPositionEmbedding
 from transformer.config import TransformerConfig
-
+import torch
 
 """Project entry point.
 
