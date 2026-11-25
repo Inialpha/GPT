@@ -1,6 +1,7 @@
 from tokenizer import CorpusBuilder
 from tokenizer.character import CharacterTokenizer
 from transformer.embeddings import TokenAndPositionEmbedding
+from transformer.attention import AttentionHead
 from transformer.config import TransformerConfig
 import torch
 
@@ -34,11 +35,14 @@ def main() -> None:
     input_ids = encoded_corpus[:config.block_size]
     input_ids = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)
     embedding = TokenAndPositionEmbedding(config)
-    output = embedding(input_ids)
-    print(output)
+    embed_output = embedding(input_ids)
+    attention = AttentionHead(config)
+    output = attention(embed_output)
+    print(torch.isfinite(output).all())
+    print(embed_output)
     print(tokenizer.decode(input_ids[0].tolist()))
     print("Input shape:", input_ids.shape)
-    print("Output shape:", output.shape)
+    print("Output shape:", embed_output.shape)
 
 
 

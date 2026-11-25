@@ -11,3 +11,7 @@ class TransformerConfig:
     n_layer: int
     dropout: float
     bias: bool
+
+    @property
+    def head_size(self):
+        return self.n_embed // self.n_head
