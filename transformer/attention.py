@@ -1,8 +1,9 @@
 """Causal self-attention layers."""
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from .config import TransformerConfig
-
+import math
 class AttentionHead(nn.Module):
     """One scaled dot-product causal attention head; input (B,T,C), output (B,T,D)."""
     def __init__(self, config: TransformerConfig):
@@ -39,6 +40,19 @@ class MultiHeadSelfAttention(nn.Module):
     """Run parallel heads, concatenate their outputs, project and apply dropout."""
     def __init__(self, config: TransformerConfig):
         super().__init__()
-        raise NotImplementedError
+        self.config = config
+        self.heads = nn.ModuleList([
+            AttentionHead(config)
+            for _ in range(config.n_head)
+        ])
+
+        self.proj = nn.Linear(config.n_embed, config.n_embed)
+        self.dropout = nn.Dropout(config.dropout)
+    
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        raise NotImplementedError
+        out = [head(x) for head in self.heads]
+        out = torch.cat(out, dim=-1)
+        out = self.proj(out)
+        out = self.dropout(out)
+
+        return out

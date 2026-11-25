@@ -1,7 +1,7 @@
 from tokenizer import CorpusBuilder
 from tokenizer.character import CharacterTokenizer
 from transformer.embeddings import TokenAndPositionEmbedding
-from transformer.attention import AttentionHead
+from transformer.attention import MultiHeadSelfAttention
 from transformer.config import TransformerConfig
 import torch
 
@@ -36,7 +36,7 @@ def main() -> None:
     input_ids = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)
     embedding = TokenAndPositionEmbedding(config)
     embed_output = embedding(input_ids)
-    attention = AttentionHead(config)
+    attention = MultiHeadSelfAttention(config)
     output = attention(embed_output)
     print(torch.isfinite(output).all())
     print(embed_output)
