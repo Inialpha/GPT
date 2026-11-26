@@ -4,6 +4,7 @@ from transformer.embeddings import TokenAndPositionEmbedding
 from transformer.attention import MultiHeadSelfAttention
 from transformer.config import TransformerConfig
 import torch
+from transformer.model import GPTLanguageModel
 
 """Project entry point.
 
@@ -32,17 +33,18 @@ def main() -> None:
         bias=True
     )
     
-    input_ids = encoded_corpus[:config.block_size]
+    #input_ids = encoded_corpus[:config.block_size]
+    #input_ids = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)
+    model = GPTLanguageModel(config)
+    model.eval()
+    prompt = "Psychology"
+    input_ids = tokenizer.encode(prompt)
     input_ids = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)
-    embedding = TokenAndPositionEmbedding(config)
-    embed_output = embedding(input_ids)
-    attention = MultiHeadSelfAttention(config)
-    output = attention(embed_output)
-    print(torch.isfinite(output).all())
-    print(embed_output)
-    print(tokenizer.decode(input_ids[0].tolist()))
-    print("Input shape:", input_ids.shape)
-    print("Output shape:", embed_output.shape)
+
+    generated_ids = model.generate(input_ids, max_new_tokens=100)
+
+    generated_text = tokenizer.decode(generated_ids[0].tolist())
+    print(generated_text)
 
 
 

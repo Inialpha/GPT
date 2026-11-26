@@ -7,6 +7,12 @@ class FeedForward(nn.Module):
     """MLP: C -> 4C -> GELU -> C, with dropout; input/output (B,T,C)."""
     def __init__(self, config: TransformerConfig):
         super().__init__()
-        raise NotImplementedError
+        self.network = nn.Sequential(
+            nn.Linear(config.n_embed, config.n_embed * 4),
+            nn.GELU(),
+            nn.Linear(config.n_embed * 4, config.n_embed),
+            nn.Dropout(config.dropout)
+        )
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        raise NotImplementedError
+        return self.network(x)

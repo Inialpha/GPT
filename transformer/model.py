@@ -11,19 +11,49 @@ class LanguageModelHead(nn.Module):
     """Project hidden states (B,T,C) to raw vocabulary logits (B,T,V)."""
     def __init__(self, config: TransformerConfig):
         super().__init__()
-        raise NotImplementedError
+        self.layer = nn.Linear(config.n_embed, config.vocab_size)
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        raise NotImplementedError
+        return self.layer(x)
+
 
 class GPTLanguageModel(nn.Module):
     """Embeddings -> Transformer blocks -> final LayerNorm -> vocabulary logits."""
     def __init__(self, config: TransformerConfig):
         super().__init__()
-        raise NotImplementedError
+        self.config = config
+        self.layer_norm = nn.LayerNorm(config.n_embed)
+        self.token_and_positional_embedding = TokenAndPositionEmbedding(config)
+        self.transformer_body = TransformerBody(config)
+        self.language_model_head = LanguageModelHead(config)
+    
     def forward(self, idx: torch.Tensor, targets: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         """Return logits (B,T,V) and optional scalar cross-entropy loss; targets are pre-shifted."""
-        raise NotImplementedError
+
+        assert idx.shape == targets.shape
+        embedding = self.token_and_positional_embedding(idx)
+        x = self.transformer_body(embedding)
+        x_norm = self.layer_norm(x)
+        logits = self.language_model_head(x_norm)
+        if targets is None:
+            return logits, None
+        B, T, V = logits.shape
+        flat_logits = logits.reshape(B * T, V)
+        targets = targets.reshape(B * T)
+
+        loss = F.cross_entropy(flat_logits, targets)
+        return logits, loss
+
+
+
     @torch.no_grad()
     def generate(self, idx: torch.Tensor, max_new_tokens: int, temperature: float = 1.0, top_k: Optional[int] = None) -> torch.Tensor:
         """Crop context, sample from final-position logits, and append one token per step."""
-        raise NotImplementedError
+        
+        for _ in range(max_new_tokens):
+            idx_cont = idx[:, -self.config.block_size:]
+            logits, loss = self(idx_cont)
+            logits = logits[:, -1, :]
+            probs = F.softmax(logits, dim=-1)
+            next_token = torch.multinomial(probs, num_samples=1)
+            idx = torch.cat((idx, next_token), dim=1)
+        return idx
