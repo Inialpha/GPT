@@ -29,7 +29,8 @@ class GPTLanguageModel(nn.Module):
     def forward(self, idx: torch.Tensor, targets: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         """Return logits (B,T,V) and optional scalar cross-entropy loss; targets are pre-shifted."""
 
-        assert idx.shape == targets.shape
+        if targets:
+            assert idx.shape == targets.shape
         embedding = self.token_and_positional_embedding(idx)
         x = self.transformer_body(embedding)
         x_norm = self.layer_norm(x)

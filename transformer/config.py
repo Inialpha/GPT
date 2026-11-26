@@ -6,6 +6,7 @@ class TransformerConfig:
     """Model hyperparameters: vocabulary, context, width, heads, layers, dropout and bias."""
     vocab_size: int
     block_size: int
+    batch_size: int
     n_embed: int
     n_head: int
     n_layer: int
