@@ -25,6 +25,10 @@ class BPETokenizerTests(unittest.TestCase):
         text = "🧪 Καλημέρα — नमस्ते"
         self.assertEqual(tokenizer.decode(tokenizer.encode(text)), text)
 
+    def test_generated_invalid_utf8_is_replaced_instead_of_raising(self):
+        tokenizer = BPETokenizer(vocab_size=256)
+        self.assertEqual(tokenizer.decode([0x88]), "�")
+
     def test_repeated_patterns_are_compressed(self):
         text = "abababababababab"
         tokenizer = BPETokenizer(vocab_size=270)
